@@ -1,0 +1,20 @@
+#uvicorn main:app --reload
+import os
+
+from fastapi import FastAPI
+from passlib.context import CryptContext
+from dotenv import load_dotenv
+from passlib.handlers.bcrypt import bcrypt
+
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+app = FastAPI()
+
+bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+from auth_routes import auth_router
+from request_routes import request_router
+
+app.include_router(auth_router)
+app.include_router(request_router)
